@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIガバナンス & ルールブック｜社内ポータル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Google Material color system — muted, document-first */
+    --blue: #1a73e8;
+    --blue-hover: #1765cc;
+    --blue-surface: #e8f0fe;
+    --blue-on-surface: #174ea6;
+
+    --green: #1e8e3e;
+    --green-surface: #e6f4ea;
+    --red: #d93025;
+    --red-surface: #fce8e6;
+    --yellow: #b06000;
+    --yellow-surface: #fef7e0;
+
+    --bg: #ffffff;
+    --surface: #f8f9fa;
+    --surface-2: #f1f3f4;
+    --hover: #f6f8fc;
+
+    --border: #dadce0;
+    --border-soft: #e8eaed;
+
+    --text: #202124;
+    --text-secondary: #5f6368;
+    --text-muted: #80868b;
+    --text-link: var(--blue);
+
+    --radius: 8px;
+    --radius-sm: 4px;
+
+    --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.08);
+    --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.12), 0 1px 2px 0 rgba(60,64,67,0.06);
+
+    --sidebar-w: 288px;
+    --header-h: 64px;
+
+    --sans: 'Google Sans Text', 'Noto Sans JP', Roboto, system-ui, sans-serif;
+    --sans-display: 'Google Sans', 'Noto Sans JP', Roboto, system-ui, sans-serif;
+    --mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--text-link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Top app bar ── */
+  .appbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 120;
+  }
+
+  .appbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: calc(var(--sidebar-w) - 24px);
+  }
+
+  .appbar-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-family: var(--sans-display);
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.5px;
+  }
+
+  .appbar-title {
+    font-family: var(--sans-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0;
+  }
+
+  .appbar-title strong {
+    font-weight: 500;
+  }
+
+  .appbar-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 16px;
+  }
+
+  .appbar-breadcrumb {
+    font-size: 13px;
+    color: var(--text-secondary);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .appbar-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    transition: background var(--transition);
+  }
+  .menu-toggle:hover { background: var(--surface-2); }
+  .menu-toggle svg { width: 20px; height: 20px; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    width: var(--sidebar-w);
+    height: calc(100vh - var(--header-h));
+    background: var(--bg);
+    border-right: 1px solid var(--border-soft);
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform var(--transition);
+    padding: 12px 0 24px;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 8px; }
+  .sidebar::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
+  .sidebar:hover::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .nav-section-label {
+    padding: 16px 24px 6px;
+    font-family: var(--sans-display);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 24px 8px 24px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background var(--transition), color var(--transition);
+    line-height: 1.5;
+  }
+
+  .nav-item:hover {
+    background: var(--hover);
+    text-decoration: none;
+  }
+
+  .nav-item.active {
+    background: var(--blue-surface);
+    color: var(--blue-on-surface);
+    border-left-color: var(--blue);
+    font-weight: 500;
+  }
+
+  .nav-item-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-item .chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nav-item.active .chip { color: var(--blue-on-surface); }
+
+  .sidebar-footer {
+    margin-top: 16px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-soft);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Main ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding-top: var(--header-h);
+    min-height: 100vh;
+  }
+
+  .page-header {
+    padding: 56px 64px 32px;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--bg);
+  }
+
+  .page-kicker {
+    font-family: var(--sans-display);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .page-header h1 {
+    font-family: var(--sans-display);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  .page-header .page-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .content {
+    padding: 32px 64px 96px;
+    max-width: 880px;
+  }
+
+  /* ── Sections ── */
+  .section { display: none; }
+  .section.active {
+    display: block;
+    animation: fade 0.2s ease;
+  }
+
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-block {
+    padding: 24px 0 28px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .section-block:last-child { border-bottom: none; }
+
+  h2.section-title {
+    font-family: var(--sans-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.1px;
+  }
+
+  h3.subsection-title {
+    font-family: var(--sans-display);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin: 24px 0 10px;
+    letter-spacing: 0;
+  }
+
+  .section-block p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .section-block p strong {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 12px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--border);
+    margin: 12px 0;
+    line-height: 1.7;
+  }
+
+  .caption {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  ul.plain {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+  }
+
+  ul.plain li {
+    font-size: 13px;
+    color: var(--text);
+    padding: 4px 0 4px 20px;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  ul.plain li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0 4px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .data-table th {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--sans-display);
+    font-weight: 500;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--hover); }
+  .data-table td strong { font-weight: 500; }
+
+  /* ── Status chips ── */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--sans-display);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    border: 1px solid transparent;
+  }
+
+  .status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status-ok { background: var(--green-surface); color: var(--green); }
+  .status-ng { background: var(--red-surface); color: var(--red); }
+  .status-review { background: var(--yellow-surface); color: var(--yellow); }
+  .status-ai-risk {
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 10px;
+    border-color: var(--border);
+  }
+  .status-ai-risk::before { display: none; }
+
+  .note-danger {
+    color: var(--red);
+    font-size: 12px;
+  }
+
+  /* ── Policy list (minimal) ── */
+  .policy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 12px 0;
+  }
+
+  .policy-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-soft);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+
+  .policy-item:last-child { border-bottom: none; }
+
+  .policy-item .policy-label {
+    font-family: var(--sans-display);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .policy-item .policy-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── Prohibit list ── */
+  .prohibit-list {
+    margin: 12px 0;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .prohibit-item {
+    padding: 12px 16px 12px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    gap: 12px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .prohibit-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 19px;
+    width: 8px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .prohibit-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red);
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── FAQ ── */
+  .faq-list {
+    border-top: 1px solid var(--border-soft);
+    margin-top: 12px;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .faq-q {
+    padding: 16px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: color var(--transition);
+    font-family: var(--sans-display);
+  }
+
+  .faq-q:hover { color: var(--blue); }
+
+  .faq-q-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    transition: transform var(--transition);
+  }
+
+  .faq-item.open .faq-q-icon {
+    transform: rotate(180deg);
+    color: var(--blue);
+  }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, padding 0.25s ease;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 320px;
+    padding: 0 0 18px;
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    margin-top: 24px;
+  }
+
+  .tl-month {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .tl-month:last-child { border-bottom: none; }
+
+  .tl-month-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .tl-month-index {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tl-month-label {
+    font-family: var(--sans-display);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .tl-track {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .tl-card {
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+    background: var(--bg);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .tl-card-label {
+    font-family: var(--sans-display);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tl-card-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .tl-card.investigate .tl-card-dot { background: var(--yellow); }
+  .tl-card.decide .tl-card-dot { background: var(--blue); }
+  .tl-card.deliver .tl-card-dot { background: var(--green); }
+
+  .tl-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tl-card li {
+    font-size: 12.5px;
+    color: var(--text);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .tl-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 4px;
+    height: 1px;
+    background: var(--text-muted);
+  }
+
+  .tl-month.ongoing .tl-month-label { color: var(--text-secondary); }
+  .tl-month.ongoing .tl-card {
+    background: var(--surface);
+    border-color: var(--border-soft);
+  }
+
+  /* ── Version tag ── */
+  .version-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .version-row .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .sidebar {
+      transform: translateX(-100%);
+      box-shadow: var(--shadow-2);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .menu-toggle { display: inline-flex; }
+    .main { margin-left: 0; }
+    .appbar-brand { min-width: 0; }
+    .appbar-divider { display: none; }
+    .appbar-breadcrumb { display: none; }
+    .page-header { padding: 32px 24px 24px; }
+    .page-header h1 { font-size: 24px; }
+    .content { padding: 24px 24px 80px; }
+    .tl-track { grid-template-columns: 1fr; }
+    .policy-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ Top app bar ═══════════ -->
+<header class="appbar">
+  <button class="menu-toggle" aria-label="メニューを開く" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="appbar-brand">
+    <div class="appbar-logo">A</div>
+    <div class="appbar-title"><strong>AI Governance</strong> Portal</div>
+  </div>
+  <div class="appbar-divider"></div>
+  <div class="appbar-breadcrumb" id="crumb">AIガバナンス方針書 / 第1章　目的と適用範囲</div>
+  <div class="appbar-meta">v1.0 · INTERNAL</div>
+</header>
+
+<aside class="sidebar">
+  <nav>
+    <div class="nav-section-label">ガバナンス方針書</div>
+    <a class="nav-item active" data-target="gov-purpose">
+      <span class="nav-item-label">第1章　目的と適用範囲</span>
+    </a>
+    <a class="nav-item" data-target="gov-policy">
+      <span class="nav-item-label">第2章　基本方針</span>
+    </a>
+    <a class="nav-item" data-target="gov-team">
+      <span class="nav-item-label">第3章　推進体制</span>
+    </a>
+    <a class="nav-item" data-target="gov-risk">
+      <span class="nav-item-label">第4章　リスク把握・評価</span>
+    </a>
+    <a class="nav-item" data-target="gov-manage">
+      <span class="nav-item-label">第5章　リスク管理と運用</span>
+    </a>
+    <a class="nav-item" data-target="gov-edu">
+      <span class="nav-item-label">第6章　教育・研修</span>
+    </a>
+    <a class="nav-item" data-target="gov-review">
+      <span class="nav-item-label">第7章　見直しと改訂</span>
+    </a>
+
+    <div class="nav-section-label">ルールブック</div>
+    <a class="nav-item" data-target="rule-tools">
+      <span class="nav-item-label">第2条　許可ツールリスト</span>
+    </a>
+    <a class="nav-item" data-target="rule-data">
+      <span class="nav-item-label">第3条　データ入力ルール</span>
+    </a>
+    <a class="nav-item" data-target="rule-output">
+      <span class="nav-item-label">第4条　生成物の取り扱い</span>
+    </a>
+    <a class="nav-item" data-target="rule-prohibit">
+      <span class="nav-item-label">第5条　禁止される利用</span>
+    </a>
+    <a class="nav-item" data-target="rule-flow">
+      <span class="nav-item-label">第6条　申請フロー</span>
+    </a>
+    <a class="nav-item" data-target="rule-bot">
+      <span class="nav-item-label">第7条　ガバナンスBOT</span>
+    </a>
+    <a class="nav-item" data-target="rule-faq">
+      <span class="nav-item-label">FAQ / 判断事例集</span>
+    </a>
+
+    <div class="nav-section-label">策定プロセス</div>
+    <a class="nav-item" data-target="timeline">
+      <span class="nav-item-label">策定タイムライン</span>
+    </a>
+    <a class="nav-item" data-target="references">
+      <span class="nav-item-label">参考規格・ガイドライン</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    株式会社 ○○○○<br>
+    v1.0 · 2026年○月策定 · 社外秘
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <div class="page-kicker" id="page-kicker">AI GOVERNANCE</div>
+    <h1 id="page-title">AIガバナンス方針書</h1>
+    <div class="page-sub" id="page-subtitle">第1章　目的と適用範囲</div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════ GOVERNANCE ═══════════ -->
+
+    <div class="section active" id="gov-purpose">
+      <div class="section-block">
+        <div class="version-row">
+          <span class="dot"></span><span>v1.0 · 2026年○月策定</span>
+        </div>
+        <h2 class="section-title">1.1 目的</h2>
+        <p>本方針書は、当社におけるAI（人工知能）技術の利用に関する基本方針を定め、<strong>AI活用によるビジネス価値の創出</strong>と、それに伴う<strong>リスクの適切な管理</strong>を両立することを目的とする。</p>
+        <div class="note">本方針書は、NIST AI Risk Management Framework（AI RMF）の4機能（Govern・Map・Measure・Manage）を参考に構成し、経済産業省「AI事業者ガイドライン」およびJDLA「生成AI利用ガイドライン」の考え方を取り入れている。</div>
+      </div>
+
+      <div class="section-block">
+        <h2 class="section-title">1.2 適用範囲</h2>
+        <p>本方針書は、当社の<strong>全役員および全従業員</strong>（契約社員、派遣社員、アルバイトを含む）に適用される。業務委託先がAIを用いて当社業務を遂行する場合も、本方針の趣旨を遵守するものとする。</p>
+      </div>
+
+      <div class="section-block">
+        <h2 class="section-title">1.3 対象とするAI</h2>
+        <table class="data-table">
+          <thead><tr><th>カテゴリ</th><th>具体例</th></tr></thead>
+          <tbody>
+            <tr><td>生成AI（テキスト）</td><td>ChatGPT, Claude, Gemini, Copilot 等</td></tr>
+            <tr><td>生成AI（画像・動画）</td><td>DALL-E, Midjourney, Stable Diffusion, Sora 等</td></tr>
+            <tr><td>コーディング支援AI</td><td>GitHub Copilot, Cursor, Claude Code 等</td></tr>
+            <tr><td>業務特化型AI</td><td>議事録AI, AI-OCR, AI翻訳, AIチャットボット 等</td></tr>
+            <tr><td>自社開発AI</td><td>API連携で構築した社内ツール・BOT 等</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="gov-policy">
+      <div class="section-block">
+        <h2 class="section-title">基本方針（Govern）</h2>
+        <p>当社は、AIの利用にあたり以下の基本方針を掲げる。</p>
+        <div class="policy-list">
+          <div class="policy-item">
+            <div class="policy-label">積極的活用の推進</div>
+            <div class="policy-desc">AIは業務効率化・価値創出のための重要な手段であり、適切な統制のもとで積極的に活用する。</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">安全性の確保</div>
+            <div class="policy-desc">個人情報・機密情報の保護を最優先とし、情報漏洩リスクを最小化する。</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">正確性の担保</div>
+            <div class="policy-desc">AI生成物はあくまで補助的なものであり、最終的な判断と責任は人間が負う。</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">透明性の確保</div>
+            <div class="policy-desc">AIの利用状況を可視化し、ステークホルダーへの説明責任を果たす。</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">継続的な改善</div>
+            <div class="policy-desc">AI技術の進化と法規制の変化に合わせ、本方針およびルールブックを定期的に見直す。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="gov-team">
+      <div class="section-block">
+        <h2 class="section-title">推進体制</h2>
+        <table class="data-table">
+          <thead><tr><th>役割</th><th>担当</th><th>主な責務</th></tr></thead>
+          <tbody>
+            <tr><td>最終承認者</td><td>○○（役職）</td><td>ガバナンス方針の最終承認、経営判断</td></tr>
+            <tr><td>推進リーダー</td><td>○○（情報セキュリティ担当）</td><td>ルールブック策定・更新、社内周知</td></tr>
+            <tr><td>推進メンバー</td><td>各部門代表 ○名</td><td>部門別ニーズ収集、運用フィードバック</td></tr>
+            <tr><td>外部アドバイザー</td><td>ai and humans inc.</td><td>AI動向キャッチアップ、ルール更新支援、BOT構築・保守</td></tr>
+          </tbody>
+        </table>
+        <h3 class="subsection-title">報告・エスカレーションライン</h3>
+        <p><strong>通常時：</strong>現場担当者 → 部門推進メンバー → 推進リーダー → 最終承認者</p>
+        <p><strong>緊急時：</strong>推進リーダーに直接報告し、既存の情報セキュリティインシデント対応フローに準ずる。</p>
+      </div>
+    </div>
+
+    <div class="section" id="gov-risk">
+      <div class="section-block">
+        <h2 class="section-title">リスクの把握と評価（Map・Measure）</h2>
+        <table class="data-table">
+          <thead><tr><th>リスク分類</th><th>概要</th><th>既存セキュリティとの対応</th></tr></thead>
+          <tbody>
+            <tr><td>情報漏洩</td><td>機密データがAIサービス提供者のサーバーに送信される</td><td>ISMS A.8（資産管理）の延長</td></tr>
+            <tr><td>ハルシネーション</td><td>AIが事実と異なる情報を生成し、そのまま利用されるリスク</td><td><span class="status status-ai-risk">AI固有</span></td></tr>
+            <tr><td>著作権侵害</td><td>生成物が第三者の著作物に類似している可能性</td><td><span class="status status-ai-risk">AI固有</span></td></tr>
+            <tr><td>プロンプトインジェクション</td><td>悪意ある入力によりAIが意図しない動作をする</td><td>SQLインジェクション対策と同様</td></tr>
+            <tr><td>シャドーAI</td><td>従業員が未許可のAIツールを業務に使用</td><td>シャドーIT管理ポリシーの拡張</td></tr>
+            <tr><td>バイアス・公平性</td><td>AIの出力に偏りがあり差別的判断につながる</td><td><span class="status status-ai-risk">AI固有</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="gov-manage">
+      <div class="section-block">
+        <h2 class="section-title">リスク管理と運用（Manage）</h2>
+        <h3 class="subsection-title">ルールブックとの連携</h3>
+        <p>本方針書に基づく具体的な利用ルール、OK/NG基準、申請フローは、別冊<strong>「AI利用ルールブック」</strong>に定める。本方針書は<strong>経営方針レイヤー</strong>、ルールブックは<strong>現場運用レイヤー</strong>として、二層構造で運用する。</p>
+        <h3 class="subsection-title">ガバナンスBOTの運用</h3>
+        <p>ルールブックの内容をベースとした「ガバナンスBOT」を社内に展開し、従業員がAI利用に関する判断に迷った際の一次相談窓口とする。</p>
+        <h3 class="subsection-title">インシデント対応</h3>
+        <p>（1）推進リーダーへの即時報告　（2）該当AIツールの利用一時停止　（3）影響範囲の調査　（4）再発防止策の策定とルールブックへの反映</p>
+      </div>
+    </div>
+
+    <div class="section" id="gov-edu">
+      <div class="section-block">
+        <h2 class="section-title">教育・研修</h2>
+        <p>全社員を対象としたAIリテラシー研修を<strong>年1回以上</strong>実施する。研修内容：</p>
+        <ul class="plain">
+          <li>本ガバナンス方針の理解</li>
+          <li>ルールブックの内容と運用方法</li>
+          <li>ガバナンスBOTの使い方</li>
+          <li>AI利用時のリスクと対処法</li>
+          <li>最新のAI動向と法規制の変化</li>
+        </ul>
+        <p>推進チームメンバーに対しては、より高度な内容の研修を別途実施する。</p>
+      </div>
+    </div>
+
+    <div class="section" id="gov-review">
+      <div class="section-block">
+        <h2 class="section-title">見直しと改訂</h2>
+        <p><strong>定期見直し：</strong>半期に1回（推進チームが起案し、最終承認者が承認）</p>
+        <p><strong>臨時見直し：</strong>重大なインシデント発生時、法規制の重要な変更時、事業環境の大きな変化時</p>
+      </div>
+    </div>
+
+    <!-- ═══════════ RULEBOOK ═══════════ -->
+
+    <div class="section" id="rule-tools">
+      <div class="section-block">
+        <h2 class="section-title">第2条　許可ツールリスト（ホワイトリスト）</h2>
+        <p>以下のツールは、所定の利用条件を遵守する限り、業務利用を許可する。リストにないツールの利用は第6条の申請フローに従うこと。</p>
+        <table class="data-table">
+          <thead><tr><th>ツール名</th><th>契約形態</th><th>用途</th><th>注意事項</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ChatGPT</strong></td><td>Enterprise / API</td><td>文章作成・要約・翻訳・調査</td><td><span class="note-danger">個人無料版の業務利用は禁止</span></td></tr>
+            <tr><td><strong>Claude</strong></td><td>Pro / API</td><td>文章作成・分析・コード生成</td><td>APIは学習非使用を確認済</td></tr>
+            <tr><td><strong>GitHub Copilot</strong></td><td>Business</td><td>コーディング支援</td><td>機密ロジックの入力に注意</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="rule-data">
+      <div class="section-block">
+        <h2 class="section-title">第3条　データ入力ルール（OK / NG / 要申請）</h2>
+        <table class="data-table">
+          <thead><tr><th>データ分類</th><th>判定</th><th>条件・備考</th></tr></thead>
+          <tbody>
+            <tr><td>公開情報（HP掲載内容等）</td><td><span class="status status-ok">OK</span></td><td>そのまま入力可</td></tr>
+            <tr><td>社内一般情報（議事メモ等）</td><td><span class="status status-ok">OK</span></td><td>社名を伏せることを推奨</td></tr>
+            <tr><td>取引先から受領した情報</td><td><span class="status status-review">要申請</span></td><td>NDA内容を確認の上、推進リーダーが判断</td></tr>
+            <tr><td>個人情報（氏名・連絡先等）</td><td><span class="status status-ng">NG</span></td><td>匿名化・仮名化処理後であればOK</td></tr>
+            <tr><td>顧客の機密情報</td><td><span class="status status-ng">NG</span></td><td>一切入力禁止</td></tr>
+            <tr><td>自社の機密情報（戦略・財務等）</td><td><span class="status status-ng">NG</span></td><td>一切入力禁止</td></tr>
+            <tr><td>ソースコード（自社開発）</td><td><span class="status status-review">要申請</span></td><td>コアロジック以外は推進リーダー承認で可</td></tr>
+            <tr><td>他社の著作物（記事・書籍等）</td><td><span class="status status-review">要申請</span></td><td>要約目的の短文引用は可。全文入力はNG</td></tr>
+          </tbody>
+        </table>
+        <div class="caption">判断に迷う場合は、ガバナンスBOTに質問するか、推進リーダーに確認すること。</div>
+      </div>
+    </div>
+
+    <div class="section" id="rule-output">
+      <div class="section-block">
+        <h2 class="section-title">第4条　生成物の取り扱いルール</h2>
+        <h3 class="subsection-title">4.1 ファクトチェック義務</h3>
+        <p>AI生成物をそのまま社外に公開・送信してはならない。必ず以下のチェックを行うこと。</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>チェック項目</th><th>確認方法</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>事実関係の正確性</td><td>一次情報源で裏取りを行う</td></tr>
+            <tr><td>2</td><td>数値・固有名詞の正確性</td><td>原典と照合する</td></tr>
+            <tr><td>3</td><td>著作権侵害の有無</td><td>既存著作物との類似をチェック</td></tr>
+            <tr><td>4</td><td>自社ブランドとの整合性</td><td>トーン・表現が適切か確認</td></tr>
+            <tr><td>5</td><td>個人情報の混入有無</td><td>生成物に個人を特定できる情報がないか確認</td></tr>
+          </tbody>
+        </table>
+        <h3 class="subsection-title">4.2 社外公開時の追加ルール</h3>
+        <p>AI生成物を社外に公開する場合は、上記チェックに加え、<strong>部門長の承認を必須</strong>とする。</p>
+        <h3 class="subsection-title">4.3 著作権の考え方</h3>
+        <p>AI生成物については著作権が発生しない可能性がある。重要な成果物については、人間の創作的関与を十分に加えた上で利用すること。</p>
+      </div>
+    </div>
+
+    <div class="section" id="rule-prohibit">
+      <div class="section-block">
+        <h2 class="section-title">第5条　禁止される利用</h2>
+        <p>以下の目的でのAI利用は、理由を問わず禁止する。</p>
+        <div class="prohibit-list">
+          <div class="prohibit-item"><span class="prohibit-num">01</span><span>人事評価・採用選考における最終判断をAIに委ねること</span></div>
+          <div class="prohibit-item"><span class="prohibit-num">02</span><span>法的拘束力のある文書（契約書等）をAI生成物のみで作成すること</span></div>
+          <div class="prohibit-item"><span class="prohibit-num">03</span><span>個人や特定の集団に対する差別的・攻撃的なコンテンツの生成</span></div>
+          <div class="prohibit-item"><span class="prohibit-num">04</span><span>他社の営業秘密や個人情報を推測・復元する目的での利用</span></div>
+          <div class="prohibit-item"><span class="prohibit-num">05</span><span>マルウェアやフィッシングコンテンツの生成</span></div>
+          <div class="prohibit-item"><span class="prohibit-num">06</span><span>ディープフェイク（虚偽の画像・動画・音声）の生成</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="rule-flow">
+      <div class="section-block">
+        <h2 class="section-title">第6条　申請フロー</h2>
+        <h3 class="subsection-title">6.1 新規AIツール導入申請</h3>
+        <table class="data-table">
+          <thead><tr><th>Step</th><th>担当</th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1</strong></td><td>申請者</td><td>AI利用申請書を記入（ツール名、利用目的、入力予定データの種類、想定リスク）</td></tr>
+            <tr><td><strong>2</strong></td><td>推進メンバー</td><td>一次レビュー（データ分類の妥当性チェック）</td></tr>
+            <tr><td><strong>3</strong></td><td>推進リーダー</td><td>セキュリティ観点での審査（利用規約、データ取扱いポリシーの確認）</td></tr>
+            <tr><td><strong>4</strong></td><td>推進リーダー</td><td>承認 / 条件付き承認 / 却下を判定し、申請者に通知</td></tr>
+            <tr><td><strong>5</strong></td><td>推進リーダー</td><td>承認時は許可ツールリストに追加し、全社に周知</td></tr>
+          </tbody>
+        </table>
+        <h3 class="subsection-title">6.2 判断に迷うケースの対応</h3>
+        <p>まずガバナンスBOTに質問。BOTの回答で判断がつかない場合は推進メンバーまたは推進リーダーに相談する。</p>
+      </div>
+    </div>
+
+    <div class="section" id="rule-bot">
+      <div class="section-block">
+        <h2 class="section-title">第7条　ガバナンスBOTについて</h2>
+        <p>ガバナンスBOTは、本ルールブックの内容を学習した社内AIチャットボットです。以下の機能を提供します。</p>
+        <div class="policy-list">
+          <div class="policy-item">
+            <div class="policy-label">データ入力可否の判定</div>
+            <div class="policy-desc">「このデータをChatGPTに入れていいですか？」→ OK / NG / 要申請を回答</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">ツール利用可否の判定</div>
+            <div class="policy-desc">「○○というツールを使いたい」→ 許可リスト照合</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">ルールの参照</div>
+            <div class="policy-desc">「社外公開時のルールは？」→ 該当条文を表示</div>
+          </div>
+          <div class="policy-item">
+            <div class="policy-label">エスカレーション</div>
+            <div class="policy-desc">BOTが判断できない場合、推進チームへの問い合わせを自動起票</div>
+          </div>
+        </div>
+        <div class="caption">BOTの判断はあくまで補助的なものであり、最終的な責任は利用者および承認者にあります。</div>
+      </div>
+    </div>
+
+    <div class="section" id="rule-faq">
+      <div class="section-block">
+        <h2 class="section-title">FAQ / よくある判断事例</h2>
+        <p>従業員から寄せられることが想定される質問と回答です。ガバナンスBOTの初期学習データとしても利用します。</p>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>会議の議事録をChatGPTで要約してもいい？</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">社内一般情報であればOK。ただし、取引先名や個人名は伏せてから入力してください。NDA対象の情報が含まれる場合は推進リーダーに確認。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>お客様から受け取った資料をAIに読み込ませて分析したい</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">原則NG。取引先の機密情報に該当する可能性があります。匿名化した上で利用する場合は要申請。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>AIで作った提案書をそのままお客様に送っていい？</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">そのままはNG。必ずファクトチェック（第4条）を行い、部門長の承認を得てから送付してください。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>個人のChatGPTアカウント（無料版）で業務の質問をしていい？</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">NG。無料版はデータが学習に使われる可能性があります。必ず会社契約のEnterprise版またはAPIを使用してください。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>AIが生成した画像を社内プレゼンに使いたい</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">社内利用はOK。ただし、実在の人物に酷似した画像や他社のロゴ・キャラクターに類似した画像は使用禁止。社外発表に使う場合は要申請。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>新しいAIツールを見つけた。試しに使ってみていい？</span>
+              <svg class="faq-q-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-a">業務データを入れなければ個人の学習として試用可。業務で使いたい場合は第6条の申請フローに従ってください。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ TIMELINE ═══════════ -->
+
+    <div class="section" id="timeline">
+      <div class="section-block">
+        <h2 class="section-title">策定プロセス・タイムライン（3ヶ月計画）</h2>
+        <p>AIガバナンスの全成果物を<strong>3ヶ月で策定・展開</strong>するためのロードマップ。各月で「検討・情報収集」「決定」「成果物」を明確に分離し、何をいつまでに固めるかを設計しています。</p>
+
+        <div class="timeline">
+          <!-- Month 1 -->
+          <div class="tl-month">
+            <div class="tl-month-head">
+              <span class="tl-month-index">Month 01</span>
+              <span class="tl-month-label">現状把握 & 方針策定</span>
+            </div>
+            <div class="tl-track">
+              <div class="tl-card investigate">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>検討・情報収集</div>
+                <ul>
+                  <li>現在のAI利用実態ヒアリング（全部門）</li>
+                  <li>利用中のAIツール棚卸し</li>
+                  <li>既存情報セキュリティポリシーのレビュー</li>
+                  <li>NIST AI RMF / JDLA / 経産省GL 精読</li>
+                  <li>同業他社のガバナンス事例調査</li>
+                  <li>法務担当への法的リスク確認</li>
+                </ul>
+              </div>
+              <div class="tl-card decide">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>決定事項</div>
+                <ul>
+                  <li>AI利用の基本スタンス（推進 or 慎重）</li>
+                  <li>推進チームの人選と権限範囲</li>
+                  <li>ガバナンス方針の骨格（章構成）</li>
+                  <li>対象とするAIの範囲定義</li>
+                  <li>リスク分類の確定</li>
+                  <li>外部アドバイザーとの契約</li>
+                </ul>
+              </div>
+              <div class="tl-card deliver">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>成果物</div>
+                <ul>
+                  <li>AIガバナンス方針書（初版）</li>
+                  <li>AI利用実態レポート</li>
+                  <li>推進チーム発足・キックオフ完了</li>
+                  <li>リスク台帳（初版）</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Month 2 -->
+          <div class="tl-month">
+            <div class="tl-month-head">
+              <span class="tl-month-index">Month 02</span>
+              <span class="tl-month-label">ルール整備 & BOT開発</span>
+            </div>
+            <div class="tl-track">
+              <div class="tl-card investigate">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>検討・情報収集</div>
+                <ul>
+                  <li>部門別ユースケースの詳細収集</li>
+                  <li>各AIツールの利用規約・データポリシー精査</li>
+                  <li>データ分類の具体例洗い出し</li>
+                  <li>申請フロー案の現場ヒアリング</li>
+                  <li>BOTの技術選定（Claude API等）</li>
+                  <li>FAQ候補の収集（想定質問リスト）</li>
+                </ul>
+              </div>
+              <div class="tl-card decide">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>決定事項</div>
+                <ul>
+                  <li>許可ツールリスト確定</li>
+                  <li>OK/NG/要申請マトリクス確定</li>
+                  <li>申請フローの承認ルート確定</li>
+                  <li>ファクトチェック項目確定</li>
+                  <li>禁止利用リスト確定</li>
+                  <li>違反時の対応基準確定</li>
+                </ul>
+              </div>
+              <div class="tl-card deliver">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>成果物</div>
+                <ul>
+                  <li>AI利用ルールブック（初版）</li>
+                  <li>申請フロー＆テンプレート</li>
+                  <li>ガバナンスBOT（プロトタイプ）</li>
+                  <li>推進チーム内テスト開始</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Month 3 -->
+          <div class="tl-month">
+            <div class="tl-month-head">
+              <span class="tl-month-index">Month 03</span>
+              <span class="tl-month-label">テスト運用 & 全社展開</span>
+            </div>
+            <div class="tl-track">
+              <div class="tl-card investigate">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>検討・情報収集</div>
+                <ul>
+                  <li>推進チーム内テストのフィードバック</li>
+                  <li>BOT回答精度の検証</li>
+                  <li>研修コンテンツの試行・改善</li>
+                  <li>部門別の追加要望・懸念ヒアリング</li>
+                </ul>
+              </div>
+              <div class="tl-card decide">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>決定事項</div>
+                <ul>
+                  <li>ルールブック修正版の最終承認</li>
+                  <li>BOTリリース判定</li>
+                  <li>研修日程・対象の確定</li>
+                  <li>月額フォロー体制の確定</li>
+                </ul>
+              </div>
+              <div class="tl-card deliver">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>成果物</div>
+                <ul>
+                  <li>全社研修の実施</li>
+                  <li>ガバナンスBOT全社リリース</li>
+                  <li>社内ポータル（本ページ）公開</li>
+                  <li>月額フォローアップ開始</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ongoing -->
+          <div class="tl-month ongoing">
+            <div class="tl-month-head">
+              <span class="tl-month-index">Month 04 →</span>
+              <span class="tl-month-label">月額フォローアップ（¥50,000/月）</span>
+            </div>
+            <div class="tl-track">
+              <div class="tl-card investigate">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>継続収集</div>
+                <ul>
+                  <li>AI関連法規制の動向モニタリング</li>
+                  <li>新ツール・技術のキャッチアップ</li>
+                  <li>BOT利用ログの分析</li>
+                </ul>
+              </div>
+              <div class="tl-card decide">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>定期判断</div>
+                <ul>
+                  <li>月1回振り返りMTG</li>
+                  <li>ルールブック更新要否の判定</li>
+                  <li>ツールリスト追加・削除の判定</li>
+                </ul>
+              </div>
+              <div class="tl-card deliver">
+                <div class="tl-card-label"><span class="tl-card-dot"></span>更新物</div>
+                <ul>
+                  <li>ルールブック改訂（随時）</li>
+                  <li>BOT判断基準アップデート</li>
+                  <li>推進チーム壁打ちサポート</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ REFERENCES ═══════════ -->
+
+    <div class="section" id="references">
+      <div class="section-block">
+        <h2 class="section-title">参考規格・ガイドライン</h2>
+        <table class="data-table">
+          <thead><tr><th>規格・ガイドライン名</th><th>概要</th></tr></thead>
+          <tbody>
+            <tr><td>NIST AI RMF 1.0 / Playbook</td><td>米国NISTによるAIリスク管理フレームワーク。Govern / Map / Measure / Manage の4機能で構成。</td></tr>
+            <tr><td>ISO/IEC 42001:2023</td><td>AIマネジメントシステムの国際認証規格。ISMSのAI版。</td></tr>
+            <tr><td>EU AI Act</td><td>EUによるリスクベースのAI規制法。2026年8月に高リスクAI規定が完全施行。</td></tr>
+            <tr><td>AI事業者ガイドライン v1.0</td><td>経産省・総務省による包括的なAI事業者向けガイドライン。</td></tr>
+            <tr><td>JDLA 生成AI利用ガイドライン v1.1</td><td>日本ディープラーニング協会による利用ガイドラインのひな形。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // Navigation
+  const titleMap = {
+    'gov-purpose':  ['AI GOVERNANCE', 'AIガバナンス方針書', '第1章　目的と適用範囲'],
+    'gov-policy':   ['AI GOVERNANCE', 'AIガバナンス方針書', '第2章　基本方針（Govern）'],
+    'gov-team':     ['AI GOVERNANCE', 'AIガバナンス方針書', '第3章　推進体制'],
+    'gov-risk':     ['AI GOVERNANCE', 'AIガバナンス方針書', '第4章　リスク把握・評価（Map・Measure）'],
+    'gov-manage':   ['AI GOVERNANCE', 'AIガバナンス方針書', '第5章　リスク管理と運用（Manage）'],
+    'gov-edu':      ['AI GOVERNANCE', 'AIガバナンス方針書', '第6章　教育・研修'],
+    'gov-review':   ['AI GOVERNANCE', 'AIガバナンス方針書', '第7章　見直しと改訂'],
+    'rule-tools':   ['RULEBOOK', 'AI利用ルールブック', '第2条　許可ツールリスト'],
+    'rule-data':    ['RULEBOOK', 'AI利用ルールブック', '第3条　データ入力ルール'],
+    'rule-output':  ['RULEBOOK', 'AI利用ルールブック', '第4条　生成物の取り扱い'],
+    'rule-prohibit':['RULEBOOK', 'AI利用ルールブック', '第5条　禁止される利用'],
+    'rule-flow':    ['RULEBOOK', 'AI利用ルールブック', '第6条　申請フロー'],
+    'rule-bot':     ['RULEBOOK', 'AI利用ルールブック', '第7条　ガバナンスBOT'],
+    'rule-faq':     ['RULEBOOK', 'AI利用ルールブック', 'FAQ / 判断事例集'],
+    'timeline':     ['PROCESS', '策定プロセス', 'タイムライン & ロードマップ'],
+    'references':   ['APPENDIX', '参考資料', '規格・ガイドライン一覧'],
+  };
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = this.dataset.target;
+
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+
+      const [kicker, title, sub] = titleMap[target] || ['', '', ''];
+      document.getElementById('page-kicker').textContent = kicker;
+      document.getElementById('page-title').textContent = title;
+      document.getElementById('page-subtitle').textContent = sub;
+      document.getElementById('crumb').textContent = `${title} / ${sub}`;
+
+      document.querySelector('.sidebar').classList.remove('open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      q.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>
