@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TOKON向け GitHub Organization導入ガイド</title>
+  <style>
+    :root{
+      --navy:#0b1020;
+      --ink:#162033;
+      --muted:#64748b;
+      --line:#dbe3ef;
+      --paper:#ffffff;
+      --soft:#f6f8fc;
+      --blue:#2563eb;
+      --blue2:#eaf1ff;
+      --green:#047857;
+      --green2:#e9f8f1;
+      --amber:#b45309;
+      --amber2:#fff6df;
+      --red:#b91c1c;
+      --red2:#fff0f0;
+      --purple:#6d28d9;
+      --purple2:#f3edff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:#eef2f7;
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+      line-height:1.72;
+      letter-spacing:.01em;
+    }
+    .page{width:min(1080px, calc(100% - 32px));margin:28px auto;background:var(--paper);border-radius:24px;overflow:hidden;box-shadow:0 18px 50px rgba(15,23,42,.12)}
+    .hero{background:radial-gradient(circle at 18% 18%, rgba(59,130,246,.40), transparent 28%),radial-gradient(circle at 85% 5%, rgba(168,85,247,.32), transparent 30%),linear-gradient(135deg,#080d1d 0%, #111827 48%, #172554 100%);color:white;padding:46px 52px 42px;position:relative}
+    .hero:after{content:"";position:absolute;inset:auto 42px 30px auto;width:190px;height:190px;border:1px solid rgba(255,255,255,.16);border-radius:50%;opacity:.6}
+    .kicker{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.28);color:#dbeafe;padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px;margin-bottom:18px;backdrop-filter:blur(8px);background:rgba(255,255,255,.06)}
+    h1{font-size:38px;line-height:1.25;margin:0 0 14px;font-weight:900;letter-spacing:.02em;max-width:820px}
+    .lead{font-size:18px;max-width:820px;margin:0;color:#dbeafe}
+    .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;color:#cbd5e1;font-size:13px}
+    .pill{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 10px;background:rgba(255,255,255,.05)}
+    main{padding:38px 52px 52px}
+    section{margin:0 0 34px}
+    h2{font-size:24px;line-height:1.35;margin:0 0 16px;border-left:6px solid var(--blue);padding-left:14px}
+    h3{font-size:18px;margin:20px 0 10px}
+    p{margin:0 0 12px}
+    ul,ol{margin:10px 0 0 1.2em;padding:0}
+    li{margin:5px 0}
+    .summary{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin:24px 0 0}
+    .card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:20px;box-shadow:0 8px 24px rgba(15,23,42,.04)}
+    .card h3{margin-top:0}
+    .decision{background:linear-gradient(180deg,#f8fbff,#fff);border:1px solid #cfe0ff;border-radius:22px;padding:24px;margin:24px 0 4px}
+    .decision strong{font-size:21px;color:#0f3d91}
+    .note{font-size:14px;color:var(--muted)}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .tag{display:inline-block;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:800;margin-right:6px;vertical-align:1px}
+    .ok{background:var(--green2);color:var(--green)}
+    .warn{background:var(--amber2);color:var(--amber)}
+    .info{background:var(--blue2);color:var(--blue)}
+    .purple{background:var(--purple2);color:var(--purple)}
+    table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0 4px;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:14px}
+    th,td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{background:#f8fafc;text-align:left;font-weight:800;color:#334155;white-space:nowrap}
+    tr:last-child td{border-bottom:none}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+    .step{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:14px;position:relative;min-height:128px}
+    .step .num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#111827;color:white;font-weight:900;font-size:13px;margin-bottom:8px}
+    .step b{display:block;line-height:1.35;margin-bottom:6px}
+    .step span{font-size:13px;color:var(--muted);line-height:1.5;display:block}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .check{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;display:flex;gap:10px;align-items:flex-start}
+    .check:before{content:"✓";display:inline-grid;place-items:center;width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--green2);color:var(--green);font-weight:900;margin-top:2px}
+    .source-list{font-size:13px;color:#475569}
+    .source-list a{color:#2563eb;text-decoration:none}
+    .footer{background:#f8fafc;border-top:1px solid var(--line);padding:24px 52px 34px;color:#64748b;font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:1px 5px;color:#0f172a}
+    @media (max-width:900px){.hero,main,.footer{padding-left:24px;padding-right:24px}h1{font-size:30px}.summary,.grid2,.grid3,.checklist{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.page{width:100%;margin:0;border-radius:0}.hero:after{display:none}}
+    @media print{body{background:white}.page{box-shadow:none;margin:0;width:100%;border-radius:0}.hero{padding:34px 38px}.hero:after{display:none}main{padding:30px 38px}.footer{padding:20px 38px}.card,.decision,.step,.check,table{box-shadow:none}a{color:inherit;text-decoration:none}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="kicker">GitHub Organization 導入説明資料</div>
+      <h1>TOKONでGitHubをチーム利用するための基本方針</h1>
+      <p class="lead">「会社が有料の作業スペースを契約し、各メンバーは自分のGitHubアカウントで参加する」運用を基本に、所有権・権限・セキュリティを整理するための社内説明ガイドです。</p>
+      <div class="meta"><span class="pill">対象：上長説明／導入判断／初期運用</span><span class="pill">想定プラン：GitHub Team</span><span class="pill">作成日：2026年5月14日</span></div>
+    </header>
+    <main>
+      <section>
+        <h2>1. まず押さえる結論</h2>
+        <div class="decision">
+          <p><strong>推奨：TOKON用のGitHub Organizationを作り、各メンバーの個人GitHubアカウントを招待する。</strong></p>
+          <p>GitHubでは、各利用者が「User account」でサインインし、会社やチームの共有スペースである「Organization」に参加して共同作業する形が標準的です。会社が管理すべきなのは、個人アカウントそのものではなく、Organization内の権限・リポジトリ・セキュリティ設定です。</p>
+        </div>
+        <div class="summary">
+          <div class="card"><h3>通常運用</h3><p><span class="tag ok">標準</span>会社がGitHub Organizationを契約し、社員・協力者は自分のGitHub個人アカウントで参加します。</p><p class="note">個人アカウントは本人のID。会社のコードや資料はOrganization配下のリポジトリに置きます。</p></div>
+          <div class="card"><h3>大企業向け運用</h3><p><span class="tag purple">Enterprise</span>GitHub Enterprise Managed Usersを使うと、IdPから会社管理のユーザーを発行・管理できます。</p><p class="note">ただし、初期導入では設定・管理負荷が高く、まずはGitHub Teamから始めるのが現実的です。</p></div>
+        </div>
+      </section>
+      <section>
+        <h2>2. なぜ個人アカウントで参加するのか</h2>
+        <div class="grid2">
+          <div class="card"><h3>GitHubの基本設計</h3><p>GitHubでは「人」はUser accountでログインします。Organizationは複数人が共有作業を行うための入れ物です。</p><ul><li>人：User account</li><li>会社・部署・プロジェクト：Organization</li><li>成果物・コード・HTML・設定：Repository</li></ul></div>
+          <div class="card"><h3>会社が制御する範囲</h3><p>会社は個人アカウント自体を所有するのではなく、Organizationへの参加・権限・リポジトリを管理します。</p><ul><li>Organizationへの招待／削除</li><li>チーム単位の権限付与</li><li>リポジトリ単位のアクセス制御</li><li>2要素認証の必須化</li></ul></div>
+        </div>
+      </section>
+      <section>
+        <h2>3. 個人利用と法人利用の違い</h2>
+        <table><thead><tr><th>項目</th><th>個人アカウントに置く場合</th><th>Organizationに置く場合</th></tr></thead><tbody><tr><td>所有権</td><td>個人に紐づく</td><td>会社・チームの共有資産として扱いやすい</td></tr><tr><td>権限管理</td><td>collaborator中心で簡易</td><td>チーム・役割・リポジトリ単位で管理しやすい</td></tr><tr><td>退職・異動時</td><td>資産移管が曖昧になりやすい</td><td>メンバー削除・権限変更で対応しやすい</td></tr><tr><td>セキュリティ</td><td>個人設定への依存が強い</td><td>Organizationポリシーを適用しやすい</td></tr><tr><td>推奨用途</td><td>個人開発・試作</td><td>会社案件・顧客案件・継続開発</td></tr></tbody></table>
+      </section>
+      <section>
+        <h2>4. リスクと対策</h2>
+        <div class="grid2">
+          <div class="card"><h3><span class="tag warn">リスク</span>個人アカウントのセキュリティに依存する</h3><p>パスワード管理、2FA、SSHキー、連携アプリが甘いと、個人アカウント経由でOrganizationにアクセスされる可能性があります。</p><p><span class="tag ok">対策</span>Organizationで2FAを必須化し、不要な権限・不要な連携を制限します。</p></div>
+          <div class="card"><h3><span class="tag warn">リスク</span>退職・外注終了時の外し忘れ</h3><p>一時参加者を残したままにすると、後から不要なアクセス権が残ります。</p><p><span class="tag ok">対策</span>参加者一覧を定期棚卸しし、外部協力者は必要最小限のリポジトリだけに招待します。</p></div>
+          <div class="card"><h3><span class="tag warn">リスク</span>会社資産が個人側に散らばる</h3><p>個人リポジトリに本番コードや資料を置くと、資産の所在と責任が曖昧になります。なお、個人が自分のアカウント上にリポジトリを作る行為そのものを、通常のOrganization運用だけで完全に禁止するものではありません。</p><p><span class="tag ok">対策</span>会社案件は必ずTOKON Organization配下に作成するルールを明文化し、正式な保管場所を一本化します。</p></div>
+          <div class="card"><h3><span class="tag warn">リスク</span>管理者が一人だけになる</h3><p>Organization ownerが一人だと、退職・休職・アカウント停止時に運用が詰まります。</p><p><span class="tag ok">対策</span>ownerは最低2名。管理者権限は少数に限定します。</p></div>
+        </div>
+      </section>
+      <section>
+        <h2>5. 推奨する初期構成</h2>
+        <div class="grid3">
+          <div class="card"><h3>Organization</h3><p><span class="tag info">例</span><code>tokon-ai</code> または <code>tokon-dev</code></p><p class="note">会社・部署・プロジェクトの共有スペース。会社資産はここに集約します。</p></div>
+          <div class="card"><h3>Members</h3><p>継続的に関わる社員・担当者。</p><p class="note">チーム単位で権限を付け、個別付与を減らします。</p></div>
+          <div class="card"><h3>Outside collaborators</h3><p>一時的な外注・確認者・限定協力者。</p><p class="note">必要なリポジトリだけにアクセスさせます。</p></div>
+        </div>
+        <h3>リポジトリ例</h3>
+        <table><thead><tr><th>リポジトリ名</th><th>用途</th><th>権限の考え方</th></tr></thead><tbody><tr><td><code>ai-training-materials</code></td><td>AI研修用HTML資料・ガイド</td><td>作成者はwrite、閲覧者はread</td></tr><tr><td><code>internal-tools</code></td><td>社内向けGAS/HTML/小規模ツール</td><td>開発者のみwrite、本番反映はreview必須</td></tr><tr><td><code>client-prototypes</code></td><td>顧客提案用プロトタイプ</td><td>案件単位でアクセス制限</td></tr><tr><td><code>website-assets</code></td><td>LP・Webサイト素材・静的ページ</td><td>管理者と制作者を分ける</td></tr></tbody></table>
+      </section>
+      <section>
+        <h2>6. 導入ステップ</h2>
+        <div class="flow"><div class="step"><div class="num">1</div><b>方針承認</b><span>会社資産はOrganization配下に置く、と決める。</span></div><div class="step"><div class="num">2</div><b>Organization作成</b><span>GitHub TeamでTOKON用Organizationを作る。</span></div><div class="step"><div class="num">3</div><b>管理者設定</b><span>ownerを最低2名にし、請求・管理担当を明確にする。</span></div><div class="step"><div class="num">4</div><b>セキュリティ設定</b><span>2FA必須、権限最小化、外部協力者ルールを設定。</span></div><div class="step"><div class="num">5</div><b>運用開始</b><span>案件・用途ごとにリポジトリを作り、棚卸しを定例化。</span></div></div>
+      </section>
+      <section>
+        <h2>7. 最低限の運用ルール案</h2>
+        <div class="checklist"><div class="check">会社案件・顧客案件・社内ツールは、原則としてTOKON Organization配下に作成する。</div><div class="check">個人アカウントのprivate repositoryに会社資産を保管しない。</div><div class="check">Organization ownerは最低2名とし、管理者権限をむやみに増やさない。</div><div class="check">Organization参加者には2FAを必須化する。</div><div class="check">外注・一時協力者はoutside collaboratorとして、必要なリポジトリだけに招待する。</div><div class="check">退職・異動・契約終了時は、Organization/Repository権限を削除する。</div><div class="check">本番反映に関わるリポジトリは、直接更新ではなくpull requestとレビューを基本にする。</div><div class="check">月1回程度、参加者・権限・不要リポジトリの棚卸しを行う。</div></div>
+      </section>
+      <section>
+        <h2>8. FAQ</h2>
+        <div class="grid2"><div class="card"><h3>Q. 個人無料アカウントで会社の有料Organizationに入るのは変？</h3><p>A. 変ではありません。GitHubでは一般的な使い方です。重要なのは、会社資産を個人リポジトリではなくOrganization配下に置くことです。</p></div><div class="card"><h3>Q. 会社がGitHubアカウントを作って配るべき？</h3><p>A. 通常は各人が自分の個人アカウントを作成します。会社がユーザーアカウントのライフサイクルまで管理したい場合は、Enterprise Managed Usersの検討領域です。</p></div><div class="card"><h3>Q. 外注や一時協力者はどうする？</h3><p>A. Organization memberにするより、outside collaboratorとして必要なリポジトリだけに招待する方が管理しやすいです。</p></div><div class="card"><h3>Q. Copilotも同時に使える？</h3><p>A. GitHub TeamとGitHub Copilotは別契約です。AIコード支援まで法人管理したい場合は、Copilot Business/Enterpriseの検討が必要です。</p></div></div>
+      </section>
+      <section>
+        <h2>9. 判断メモ</h2>
+        <table><thead><tr><th>判断項目</th><th>推奨</th><th>理由</th></tr></thead><tbody><tr><td>初期プラン</td><td>GitHub Team</td><td>法人・チーム利用に必要な権限管理とレビュー運用を始めやすい</td></tr><tr><td>ユーザー方式</td><td>個人アカウント招待</td><td>GitHubの標準的な使い方で、導入負荷が低い</td></tr><tr><td>会社資産の置き場</td><td>Organization配下</td><td>所有権・継続管理・退職時対応が明確になる</td></tr><tr><td>セキュリティ最低条件</td><td>2FA必須・owner複数・権限最小化</td><td>初期導入で最も効果が高い統制ポイント</td></tr><tr><td>Enterprise検討条件</td><td>SSO/SCIM/ID管理/監査が必須になった時</td><td>初期から入れるより、必要性が明確になってからでよい</td></tr></tbody></table>
+      </section>
+      <section>
+        <h2>10. 初心者向け用語集</h2>
+        <p class="note">GitHubを初めて使う人が、資料内の言葉をざっくり理解するための説明です。厳密な技術定義よりも、社内説明で迷わないことを優先しています。</p>
+        <table><thead><tr><th>用語</th><th>読み方</th><th>意味</th><th>社内での理解</th></tr></thead><tbody><tr><td>GitHub</td><td>ギットハブ</td><td>コードや制作物の変更履歴を管理し、チームで共同作業するためのサービス。</td><td>HTML、GAS、Webアプリ、設定ファイルなどを安全に保管・共同編集する場所。</td></tr><tr><td>Git</td><td>ギット</td><td>ファイルの変更履歴を記録する仕組み。</td><td>「誰が・いつ・何を変更したか」を追えるようにする土台。</td></tr><tr><td>Account</td><td>アカウント</td><td>GitHubにログインするための個人ID。</td><td>各メンバーが自分で作成し、会社のOrganizationに参加する。</td></tr><tr><td>Organization</td><td>オーガナイゼーション</td><td>会社・チーム用の共有スペース。</td><td>TOKONとして管理する正式な置き場。会社資産はここに集約する。</td></tr><tr><td>Repository</td><td>リポジトリ／レポジトリ</td><td>コードや資料一式を入れる箱。変更履歴も一緒に管理される。</td><td>案件・ツール・資料ごとの保管フォルダのようなもの。</td></tr><tr><td>Private repository</td><td>プライベート・リポジトリ</td><td>許可された人だけが見られる非公開リポジトリ。</td><td>顧客案件や社内ツールは原則privateで管理する。</td></tr><tr><td>Public repository</td><td>パブリック・リポジトリ</td><td>インターネット上の誰でも見られる公開リポジトリ。</td><td>社内・顧客情報を含むものはpublicにしない。</td></tr><tr><td>Member</td><td>メンバー</td><td>Organizationに所属する利用者。</td><td>継続的に関わる社員・担当者。</td></tr><tr><td>Outside collaborator</td><td>アウトサイド・コラボレーター</td><td>Organization全体には所属せず、特定リポジトリだけに招待される外部協力者。</td><td>外注・一時協力者・限定的な確認者に使う。</td></tr><tr><td>Owner</td><td>オーナー</td><td>Organization全体を管理できる強い権限。</td><td>最低2名にする。ただし増やしすぎない。</td></tr><tr><td>Read / Write / Admin</td><td>リード／ライト／アドミン</td><td>リポジトリに対する権限レベル。Readは閲覧、Writeは編集、Adminは管理。</td><td>必要な人に必要な権限だけ付ける。迷ったら小さく始める。</td></tr><tr><td>2FA</td><td>ツーエフエー／二要素認証</td><td>パスワードに加えて、スマホアプリや認証コードなどでも本人確認する仕組み。</td><td>TOKON Organizationに参加する人は必須にする。未設定の人はアクセスできない運用にする。</td></tr><tr><td>Clone</td><td>クローン</td><td>GitHub上のリポジトリを自分のPCにコピーすること。</td><td>開発作業ではよく使う。会社資産の扱いは社内ルールに従う。</td></tr><tr><td>Commit</td><td>コミット</td><td>変更内容を履歴として保存すること。</td><td>「この修正を記録する」操作。</td></tr><tr><td>Pull request</td><td>プルリクエスト</td><td>自分の変更を本体に取り込んでもらうための依頼。</td><td>重要なリポジトリでは、いきなり本番反映せずレビューしてから取り込む。</td></tr><tr><td>Review</td><td>レビュー</td><td>変更内容を他の人が確認すること。</td><td>ミスや不要な公開を防ぐための確認手順。</td></tr><tr><td>Branch</td><td>ブランチ</td><td>本体とは別に作業するための分岐。</td><td>本番用ファイルを直接触らず、安全に修正するための作業場所。</td></tr><tr><td>Fork</td><td>フォーク</td><td>リポジトリを別の場所に複製して、自分側で独立して扱えるようにすること。</td><td>会社のprivate repositoryでは、不要な複製を避けるため基本的に禁止・制限する。</td></tr><tr><td>SSH key / Token</td><td>エスエスエイチキー／トークン</td><td>GitHubへ安全に接続するための認証情報。</td><td>パスワードのように扱う。共有しない、不要になったら削除する。</td></tr><tr><td>GitHub Team</td><td>ギットハブ・チーム</td><td>Organizationでチーム利用するための有料プラン。</td><td>初期導入で想定する現実的な法人プラン。</td></tr><tr><td>GitHub Enterprise</td><td>ギットハブ・エンタープライズ</td><td>大企業向けの上位プラン。高度なID管理・監査・セキュリティ機能を使える。</td><td>初期導入では必須ではない。将来、統制要件が強くなったら検討する。</td></tr></tbody></table>
+      </section>
+    </main>
+    <footer class="footer"><strong>参照元・確認先</strong><ul class="source-list"><li>GitHub Docs: Types of GitHub accounts — https://docs.github.com/en/get-started/learning-about-github/types-of-github-accounts</li><li>GitHub Docs: About organizations — https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations</li><li>GitHub Docs: Getting started with GitHub Team — https://docs.github.com/en/get-started/onboarding/getting-started-with-github-team</li><li>GitHub Docs: Inviting users to join your organization — https://docs.github.com/en/organizations/managing-membership-in-your-organization/inviting-users-to-join-your-organization</li><li>GitHub Docs: Requiring two-factor authentication in your organization — https://docs.github.com/en/organizations/keeping-your-organization-secure/managing-two-factor-authentication-for-your-organization/requiring-two-factor-authentication-in-your-organization</li><li>GitHub Docs: Enterprise Managed Users — https://docs.github.com/enterprise-cloud@latest/admin/concepts/identity-and-access-management/enterprise-managed-users</li><li>GitHub Pricing — https://github.com/pricing</li></ul><p class="small">注：価格・機能・契約条件は変更される可能性があるため、契約前に公式ページで最新情報を確認してください。</p></footer>
+  </div>
+</body>
+</html>
